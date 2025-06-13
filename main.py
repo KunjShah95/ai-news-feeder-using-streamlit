@@ -2,6 +2,8 @@ import streamlit as st
 import pandas as pd
 from data import main  # Changed from fetch_data to data
 from datetime import datetime
+from streamlit_autorefresh import st_autorefresh
+
 import time
 
 
@@ -25,15 +27,14 @@ def run_dashboard():
     """
     )
     st.sidebar.markdown("---")
-    # --- Safe Auto-refresh Feature ---
+    # --- Safe Auto-refresh Feature using st_autorefresh ---
     auto_refresh = st.sidebar.checkbox("Auto-refresh", value=False)
     refresh_interval = st.sidebar.selectbox(
         "Refresh interval (seconds)", [30, 60, 120, 300], index=1
     )
     if auto_refresh:
         st.write(f"Auto-refreshing every {refresh_interval} seconds...")
-        time.sleep(refresh_interval)
-        st.experimental_rerun()
+        st_autorefresh(interval=refresh_interval * 1000, key="autorefresh")
     # --- New Feature: Show last refresh time ---
     st.sidebar.write(f"Last refreshed: {datetime.now().strftime('%Y-%m-%d %H:%M:%S')}")
 
